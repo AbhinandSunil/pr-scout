@@ -1,6 +1,11 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+from app.routers.campaigns import router as campaigns_router
+
+
+app = FastAPI(title="PR Scout API")
+
+app.include_router(campaigns_router)
 
 
 @app.get("/")
