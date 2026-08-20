@@ -19,7 +19,7 @@ def get_db():
         db.close()
 
 
-@router.post("/{campaign_id}/{opportunity_id}")
+@router.post("/single/{campaign_id}/{opportunity_id}")
 def match_campaign_to_opportunity(
     campaign_id: int,
     opportunity_id: int,
@@ -70,4 +70,80 @@ def match_campaign_to_opportunity(
         "total_score": result.total_score,
         "reasons": result.reasons,
         "concerns": result.concerns
+    }
+
+@router.post("/campaign/{campaign_id}")
+def match_campaign_to_all_opportunities(
+    campaign_id: int,
+    db: Session = Depends(get_db)
+):
+    campaign = (
+        db.query(Campaign)
+        .filter(Campaign.id == campaign_id)
+        .first()
+    )
+
+    if not campaign:
+        raise HTTPException(
+            status_code=404,
+            detail="Campaign not found"
+        )
+
+    opportunities = db.query(Opportunity).all()
+
+    if not opportunities:
+        raise HTTPException(
+            status_code=404,
+            detail="No opportunities found"
+        )
+
+    results = []
+    failed_opportunities = []
+
+    for opportunity in opportunities:
+        try:
+            result = evaluate_opportunity_with_ai(
+                campaign,
+                opportunity
+            )
+
+            results.append({
+                "opportunity_id": opportunity.id,
+                "opportunity_name": opportunity.name,
+                "opportunity_type": opportunity.type,
+                "topic_score": result.topic_score,
+                "audience_score": result.audience_score,
+                "geographic_score": result.geographic_score,
+                "promotion_score": result.promotion_score,
+                "timing_score": result.timing_score,
+                "total_score": result.total_score,
+                "reasons": result.reasons,
+                "concerns": result.concerns
+            })
+
+        except Exception as e:
+            print(
+                f"AI ERROR for opportunity {opportunity.id}:",
+                repr(e)
+            )
+
+            failed_opportunities.append({
+                "opportunity_id": opportunity.id,
+                "opportunity_name": opportunity.name,
+                "error": "Evaluation failed"
+            })
+
+    results.sort(
+        key=lambda match: match["total_score"],
+        reverse=True
+    )
+
+    return {
+        "campaign_id": campaign.id,
+        "campaign_name": campaign.name,
+        "total_opportunities": len(opportunities),
+        "successful_evaluations": len(results),
+        "failed_evaluations": len(failed_opportunities),
+        "matches": results,
+        "failed_opportunities": failed_opportunities
     }
