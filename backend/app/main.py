@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-
+from app.routers.matches import router as matches_router
 from app.database.connection import Base, engine
 from app.models.campaign import Campaign
 from app.models.opportunity import Opportunity
@@ -13,7 +13,7 @@ app = FastAPI(title="PR Scout API")
 
 app.include_router(campaigns_router)
 app.include_router(opportunities_router)
-
+app.include_router(matches_router)
 
 @app.get("/")
 def read_root():
