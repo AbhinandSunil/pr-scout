@@ -92,12 +92,16 @@ export default async function MatchesPage({
 
                 <div className="text-right">
                   <div className="text-3xl font-bold text-gray-900">
-                    {match.total_score}
-                  </div>
+  {match.total_score}
+</div>
 
-                  <div className="text-sm text-gray-500">
-                    / 100
-                  </div>
+<div className="text-sm text-gray-500">
+  / 100
+</div>
+
+<div className="mt-1 text-xs font-medium text-gray-700">
+  {getMatchLabel(match.total_score)}
+</div>
                 </div>
               </div>
 
@@ -176,6 +180,13 @@ export default async function MatchesPage({
       </div>
     </main>
   );
+}
+
+function getMatchLabel(score: number) {
+  if (score >= 85) return "Excellent match";
+  if (score >= 70) return "Strong match";
+  if (score >= 50) return "Moderate match";
+  return "Weak match";
 }
 
 function Score({

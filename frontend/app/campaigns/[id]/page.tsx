@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type Campaign = {
   id: number;
   name: string;
@@ -49,12 +51,12 @@ export default async function CampaignPage({
   return (
     <main className="min-h-screen bg-gray-50 p-8">
       <div className="mx-auto max-w-5xl">
-        <a
-          href="/"
-          className="text-sm text-gray-500 hover:text-gray-900"
-        >
-          ← Back to campaigns
-        </a>
+        <Link
+            href="/"
+            className="text-sm text-gray-500 hover:text-gray-900"
+            >
+            ← Back to campaigns
+        </Link>
 
         <div className="mt-6 rounded-xl bg-white p-6 shadow-sm">
           <p className="text-sm text-gray-500">
@@ -110,12 +112,12 @@ export default async function CampaignPage({
           </div>
 
           <div className="mt-8">
-            <a
-              href={`/campaigns/${campaign.id}/matches`}
-              className="inline-block rounded-lg bg-black px-4 py-2 text-white"
-            >
-              Analyze Opportunities
-            </a>
+            <Link
+                href={`/campaigns/${campaign.id}/matches`}
+                className="inline-block rounded-lg bg-black px-4 py-2 text-white"
+                >
+                Analyze Opportunities
+            </Link>
           </div>
         </div>
       </div>

@@ -1,8 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-
 
 export default function NewOpportunityPage() {
   const router = useRouter();
@@ -69,12 +69,12 @@ export default function NewOpportunityPage() {
   return (
     <main className="min-h-screen bg-gray-50 p-8">
       <div className="mx-auto max-w-3xl">
-        <a
-          href="/"
-          className="text-sm text-gray-500 hover:text-gray-900"
-        >
-          ← Back to campaigns
-        </a>
+        <Link
+            href="/"
+            className="text-sm text-gray-500 hover:text-gray-900"
+            >
+            ← Back to campaigns
+        </Link>
 
         <div className="mt-6 rounded-xl bg-white p-6 shadow-sm">
           <h1 className="text-2xl font-bold text-gray-900">
@@ -245,4 +245,4 @@ function TextAreaField({
       />
     </div>
   );
-}
+}   
