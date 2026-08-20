@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.database.connection import SessionLocal
 from app.models.campaign import Campaign
 from app.models.opportunity import Opportunity
-from app.services.matching_service import evaluate_match
+from app.services.ai_service import evaluate_opportunity_with_ai
 
 
 router = APIRouter(prefix="/matches", tags=["matches"])
@@ -49,7 +49,15 @@ def match_campaign_to_opportunity(
             detail="Opportunity not found"
         )
 
-    result = evaluate_match(campaign, opportunity)
+    try:
+        result = evaluate_opportunity_with_ai(campaign, opportunity)
+    except Exception as e:
+        print("AI ERROR:", repr(e))
+
+        raise HTTPException(
+            status_code=502,
+            detail="AI evaluation failed"
+        )
 
     return {
         "campaign_id": campaign.id,
