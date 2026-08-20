@@ -1,7 +1,11 @@
 from fastapi import FastAPI
 
+from app.database.connection import Base, engine
+from app.models.campaign import Campaign
 from app.routers.campaigns import router as campaigns_router
 
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="PR Scout API")
 
