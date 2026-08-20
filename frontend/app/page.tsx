@@ -45,9 +45,21 @@ export default async function Home() {
               Campaigns
             </h2>
 
-            <button className="rounded-lg bg-black px-4 py-2 text-white">
+            <div className="flex items-center gap-3">
+            <Link
+              href="/opportunities/new"
+              className="rounded-lg border border-gray-300 px-4 py-2 text-gray-900"
+            >
+              Add Opportunity
+            </Link>
+
+            <Link
+              href="/campaigns/new"
+              className="rounded-lg bg-black px-4 py-2 text-white"
+            >
               Create Campaign
-            </button>
+            </Link>
+          </div>
           </div>
 
           <div className="mt-6 space-y-4">
